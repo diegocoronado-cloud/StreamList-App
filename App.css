@@ -1,0 +1,15 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f4f4f4;
+}
+
+.main-content {
+  padding: 20px;
+}
+
+.placeholder {
+  text-align: center;
+  color: #555;
+  margin-top: 50px;
+}
