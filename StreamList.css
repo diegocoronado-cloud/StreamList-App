@@ -28,3 +28,38 @@
 .streamlist-form button:hover {
   background-color: #0056b3;
 }
+
+.streamlist-items {
+  list-style-type: none;
+  padding: 0;
+  margin-top: 20px;
+  text-align: left;
+}
+
+.streamlist-items li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #eee;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+}
+
+.streamlist-items li.completed span {
+  text-decoration: line-through;
+  color: gray;
+}
+
+.item-actions button {
+  margin-left: 8px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 1rem;
+  color: #555;
+}
+
+.item-actions button:hover {
+  color: #000;
+}
