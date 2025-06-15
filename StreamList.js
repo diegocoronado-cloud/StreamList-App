@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./StreamList.css";
 import { FaEdit, FaTrash, FaCheck } from "react-icons/fa";
 
@@ -7,6 +7,17 @@ const StreamList = () => {
   const [list, setList] = useState([]);
   const [editingIndex, setEditingIndex] = useState(null);
   const [editText, setEditText] = useState("");
+
+  // Load from localStorage on mount
+  useEffect(() => {
+    const stored = localStorage.getItem("streamList");
+    if (stored) setList(JSON.parse(stored));
+  }, []);
+
+  // Save to localStorage whenever list changes
+  useEffect(() => {
+    localStorage.setItem("streamList", JSON.stringify(list));
+  }, [list]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
