@@ -1,3 +1,4 @@
+// File: src/components/Movies.js
 import React, { useState } from "react";
 import axios from "axios";
 import "./Movies.css";
@@ -5,10 +6,14 @@ import "./Movies.css";
 const Movies = () => {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const searchMovies = async () => {
     if (!query.trim()) return;
     try {
+      setIsLoading(true);
+      setError("");
       const res = await axios.get(`https://api.themoviedb.org/3/search/movie`, {
         params: {
           api_key: "9e1e2e6256dd404e46a1f8f4b5b84a2e",
@@ -16,8 +21,11 @@ const Movies = () => {
         }
       });
       setResults(res.data.results);
-    } catch (error) {
-      console.error("Failed to fetch from TMDB API", error);
+    } catch (err) {
+      setError("Failed to fetch movie data. Please try again.");
+      console.error("API Error:", err);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -33,6 +41,9 @@ const Movies = () => {
         />
         <button onClick={searchMovies}>Search</button>
       </div>
+
+      {isLoading && <p>Loading...</p>}
+      {error && <p className="error">{error}</p>}
 
       <div className="movie-results">
         {results.map(movie => (
