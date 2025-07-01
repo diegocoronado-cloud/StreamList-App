@@ -1,12 +1,20 @@
-import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import React, { useState } from "react";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import StreamList from "./components/StreamList";
 import Movies from "./components/Movies";
 import Cart from "./components/Cart";
 import About from "./components/About";
+import Login from "./components/Login";
+import Checkout from "./components/Checkout";
+import CreditCard from "./components/CreditCard";
 import Subscriptions from "./components/Subscriptions";
-import "./App.css";
+import { AuthProvider, useAuth } from "./contexts/AuthContext";
+
+function PrivateRoute({ children }) {
+  const { isAuthenticated } = useAuth();
+  return isAuthenticated ? children : <Navigate to="/login" />;
+}
 
 function App() {
   const [cart, setCart] = useState(() => {
@@ -15,18 +23,23 @@ function App() {
   });
 
   return (
-    <Router>
-      <Navbar cart={cart} />
-      <div className="main-content">
-        <Routes>
-          <Route path="/" element={<StreamList />} />
-          <Route path="/movies" element={<Movies />} />
-          <Route path="/cart" element={<Cart cart={cart} setCart={setCart} />} />
-          <Route path="/subscriptions" element={<Subscriptions cart={cart} setCart={setCart} />} />
-          <Route path="/about" element={<About />} />
-        </Routes>
-      </div>
-    </Router>
+    <AuthProvider>
+      <Router>
+        <Navbar />
+        <div className="main-content">
+          <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route path="/" element={<PrivateRoute><StreamList /></PrivateRoute>} />
+            <Route path="/movies" element={<PrivateRoute><Movies /></PrivateRoute>} />
+            <Route path="/subscriptions" element={<PrivateRoute><Subscriptions cart={cart} setCart={setCart} /></PrivateRoute>} />
+            <Route path="/cart" element={<PrivateRoute><Cart cart={cart} setCart={setCart} /></PrivateRoute>} />
+            <Route path="/about" element={<PrivateRoute><About /></PrivateRoute>} />
+            <Route path="/checkout" element={<PrivateRoute><Checkout /></PrivateRoute>} />
+            <Route path="/credit-card" element={<PrivateRoute><CreditCard /></PrivateRoute>} />
+          </Routes>
+        </div>
+      </Router>
+    </AuthProvider>
   );
 }
 
